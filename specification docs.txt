@@ -1,0 +1,217 @@
+COMPU-DATA INTERNATIONAL, LLC \9 14610 Falling Creek Dr. « Houston, Texas 77068 (281) 292-1333 » Fax (281) 966.1598
+Software Development Specification Document
+Title:
+Java Web Service for Querying Eureka Instance
+Overview:
+This document specifies the requirements and implementation details for developing a
+Java-based web service using Spring Boot. The web service, named “cdi-eureka-service”,
+will allow clients to query an Eureka server for service and server details, and return the
+information ina JSON format. It is important to note that this service may itself register with
+the Eureka instance it is querying.
+1. Functional Requirements
+1.1 Client Communication
+a. The web service must expose a REST endpoint where clients can send requests.
+b. Clients must provide the following input:
+» “eurekaServerURL”: The URL of the Eureka instance to query. This
+information is required and must be included in the body of the APL
+» “groupBy”: Specifies how the data in the JSON file should be grouped. This
+information must be included as a parameter in the APL. Accepted values
+are:
+= ‘servers': Group the JSON by servers and list the services registered
+on each server. Use this value as default.
+= ‘services": Group the JSON by services and list the servers where
+each service is running.
+1.2 Querying the Eureka Instance
+a. The web service must use the provided “eurekaServerURL” to query the Eureka
+server.
+b. Itwill retrieve the following information from the Eureka server:
+> Listof service names.
+> Listof server instances for each service.
+1.3 Response
+The service must return a JSON response structured according to the “groupBy”
+parameter:
+Page 10f7 Company Confidential Copyright © 2024 COMPU-DATA Intemational, LLC All Rights Reserved
+COMPU-DATA INTERNATIONAL, LLC (7 14610 Falling Creek Dr. « Houston, Texas 77068 (281) 292-1333 » Fax (281) 966.1598
+Software Development Specification Document
+a. For groupBy: "servers":
+“returnCode™ “message™: ™ “hetpstatusCode”: ™", “transactionld”: 7, “elapseTine™ “servers™: [
+“server” t "hostName": “The hostname where the service is running.", "services": [ 1 service™: { “serviceName": “The logical name of the application (used by clients to look up the service).”, "ipAddr": "The Host 1P Address.”, “port”: “The port on which the service listens.”, "Secureort™:"The port nusber on which the service comsunicates over HTTPS (secure comsunication).”, url”: "Swagger URL", “homePageUrl®: “The URL pointing to the home page or main dashboard of the service instance.”, “statusPageUrl”: “"Swagger URL", “Status": "Current status of the instance (UP, DOWN, OUT_OF_SERVICE, etc.).”, "lastupdatedTinestamp”: "The timestamp of the last update received from the service instance in the registry.” “lastbirtyTinestan™: “The timestawp of the last change made by the instance itself (e.g., metadata, status )", “isCoordinatingDiscoveryServer™: "A boolean flag indicating whether the current node is acting as the coordinator in a cluster of Eureka servers.”, “metadataMap”: { “version": "The application or API version currently deployed (e.g., semantic version v1.2.3). “region”: "The geographical region (e.g., ANS region like us-east-1) where the instance is running.”, “zone™: "The availability zone within a region (e.g., us-east-13).", “instanceType": "Describes the role or category of the instance (e.g., backend, worker, scheduler). Helps identify service responsibilities in microservice environments.”, “buildNumber”: "A C1/CD build identifier (e.g., build-2025-85-12) representing the exact version or build of the deployed code. Useful for debugging and traceability." b "leaselnfo™: { “renewalintervalinsecs™: "How often (in seconds) the client sends a heartbeat to Eureka (default: 30).7, “durationInsecs”: "The lease duration — how long Eurcka waits without hearing from the instance before marking it as unavailable (default: 99).", “registrationTinestanp”: "When the instance registered (in epoch milliseconds).”, “lastRenewallinestamp™: "Last time the instance sent a heartbeat (in epoch milliseconds).”, “evictionTimestamp™: "When the instance was evicted from the registry (o weans not evicted).”, “serviceUpTimestamp”: "When the service first reported a status of UP."
+Page 20f7 Company Confidential Copyright © 2024 COMPU-DATA Intemational, LLC All Rights Reserved
+COMPU-DATA INTERNATIONAL, LLC 14610 Falling Creek Dr. « Houston, Texas 77068 (281) 292-1333 » Fax (281) 966.1598
+Software Development Specification Document
+b. For groupBy: "services":
+“returnCode™: "%, “message” “httpstatusCode™: **, “transactionld”: ", “elapseline” “services™: [ { "service” { “serviceName™: “The logical name of the application (used by clients to look up the service).”, "servers™: [ { “server™: { “hostNane” “The hostnane where the service is running.”, pAddr": “The Host 1P Address.”, “"port”: “The port on which the service listens.”,
+“Swagger URL", “homepageUrl” “The URL pointing to the home page or main dashboard of the service instance.”, “statusPageUrl”: "Swagger URL",
+“securePort™:"The port nusber on which the service comsunicates over HITPS (secure communication).”, "url®
+"status”: "Current status of the instance (UP, DOWN, OUT_OF SERVICE, etc.).”, “lastUpdatedTinestamp™: “The timestamp of the last update received from the service instance in the registry
+“"lastoirtyTimestan™: "The timestamp of the last change made by the instance itself (e.g., metadata, status
+cordinator in a cluster of Eureka servers “metadataMap™:{
+“region”
+“isCoordinatingdiscoveryServer™: A boolean flag indicating whether the current node is acting as the c
+"The application or API version currently deployed (e.g., semantic version v1.2 3.,
+"The geographical region (e.g., AWS region like us-east-1) where the instance is running.”, “The svsilability zone within 3 region (s.., us-east-ia).", “instanceType” “Describes the role or category of the instance (e.g., backend, worker, scheduler). Helps identify service responsibilities in microservice environments. “buildNumber”: "A C1/CD build identifier (e.g., build-2825-85-12) representing the exact version or build of the deployed code. Useful for debugging and traceability.”
+easelnfo™: { “renewalintervalinsecs: "How often (in seconds) the client sends a heartbeat to Eureka (default: 36).", "durationInsecs™: "The lease duration — how long Eurcka waits without hearing from the instance before marking it as unavailable (default: 96).", “registrationlinestasp’: "When the instance registered (in epoch milliseconds).”, “lastRenewallinestanp™: “Last time the instance sent a heartbeat (in epoch milliseconds). “evictionTinestanp” “When the instance was evicted from the registry (@ means not evicted).” “serviceUpTimestamp”: "When the service first reported a status of UP."
+2. Technical Requirements
+2.1 Development Environment
+a. Language: Java 11 or higher
+b. Framework: Spring Boot 3.0+
+c. Build Tool: Maven or Gradle
+Page 30f7 Company Confidential Copyright © 2024 COMPU-DATA Intemational, LLC All Rights Reserved
+COMPU-DATA INTERNATIONAL, LLC
+\D 14610 Falling Creek Dr. « Houston, Texas 77068
+d.
+(281) 292-1333 » Fax (281) 966.1598
+Software Development Specification Document
+Dependency Management: Use Spring Boot Starter Web and Spring Boot Starter
+Actuator.
+3. Service Design
+3.1 REST Endpoint
+a.
+b.
+[
+d
+Endpoint URL: /cdi-eureka-service /v1/eureka/apps
+Description: Retrieves all registered applications from Eureka grouped by services
+HTTP Method: GET
+Headers Required:
+» Content-Type: application/json
+Request Body:
+"eurekaServerURL": "http://eureka.example.com/eureka”,
+"groupBy": "services"
+3.2 Processing Steps:
+a.
+b. o
+Parse the input JSON and extract “eurekaServerURL” and “groupBy”.
+Use RestTemplate or WebClient to send a GET request to the Eureka API
+(“/eureka/apps”).
+Parse the response from Eureka.
+Construct the JSON output structure based on the retrieved data and the “groupBy”
+parameter.
+Return the JSON output to the client.
+3.3 JSON Output Structure:
+See Section 1.3 above for.
+Field Type Description
+returnCode String Code indicating the result of the API call (e.g.,
+SUCCESS, INVALID_REQUEST). Please refer to
+the Response Codes Reference document for
+more details.
+message String Descriptive message about the APIresponse.
+httpStatusCode Integer The standard HTTP status code corresponds to
+the response.
+transation]D String Unique identifier for the API transaction, useful
+for debugging and logging
+elapsedTime float The total time, in milliseconds, taken from the
+start of a process or event to its completion.
+applications Json List of applications with their respective names
+string and Instances. See the example below.
+Page 40f 7 Company Confidential
+Copyright © 2024 COMPU-DATA Intemational, LLC
+All Rights Reserved
+COMPU-DATA INTERNATIONAL, LLC ) (281) 292-1333 » 14610 Falling Creek Dr. « Houston, Texas 77068
+Fax (281) 966.1598
+Software Development Specification Document
+3.4 Return Codes
+HTTP Status Error Code Message
+200 Ok SUCCESS Request completed successfully.
+400 Bad Request INVALID_RQUEST The query built badly formatted (e.g.,
+missing fields).
+400 Bad Request INVALID_TOKEN The provided JWTtoken is invalid or
+expired.
+401 Unauthorized AUTH_REQUIRED Authentication to server failed
+403 Forbidden ACCESS_DENIED Credentials were valid butaction was
+not permitted.
+500 Internal Server
+Error
+UNKNOWN An unexpected or unclassified internal
+error happened.
+502 Bad Gateway SERVICE_DOWN The system is currently unavailable.
+504 Gateway TIMEOUT The operation took too long and was
+Timeout aborted.
+4. Code Standards
+4.1 Language-Specific Style Guides
+Language / Framework Style Guide
+JavaScript / TypeScript Prettier / ESlint
+Java Coding Conventions
+Naming Conventions for Classes,
+Interfaces, Constants, Enum, Types,
+Methods, and namespaces (NET) should
+use PascalCase, while variables,
+parameters, and API Responses use
+camelCase
+Use spaces, not tabs
+4 spaces per indentation level
+Use // for single comments lines
+Use /*...*/ for multiline comments
+Use /// for public member
+Keeps comments clear, concise, and
+useful
+4.2 Code Formatting Rules
+Some general formatting rules we follow, regardless of language:
+2 o
+Page 50f7
+Use spaces, not tabs (2 or 4 spaces depending on project)
+Company Confidential Copyright © 2024 COMPU-DATA Intemational, LLC All Rights Reserved 
+COMPU-DATA INTERNATIONAL, LLC 14610 Falling Creek Dr. « Houston, Texas 77068 (281) 292-1333 » Fax (281) 966.1598
+Software Development Specification Document
+< Keep line length under 100-120 characters
+< Write descriptive variable and function names
+< Break up large functions into smaller reusable pieces
+< Avoid nested if/else blocks when possible
+<« Include comments for complex logic (but not obvious code)
+5. Testing Requirements
+5.1 Unit Testing
+Write unit tests for:
+a. Input validation.
+b. Eureka API call handling.
+c. JSON response construction for both “groupBy” values.
+d. Use “Junit” and “Mockito” for testing.
+5.2 Integration Testing
+a. Testagainsta mock Eureka server.
+b. Validate the service retrieves correct data and constructs the response as expected
+for both “groupBy” values.
+5.3 Error Handling Testing
+Test cases for:
+a. Invalid “eurekaServerURL”".
+b. Unreachable Eureka server.
+c. Malformed responses from Eureka.
+5.4 Performance Testing
+a. Test the service with a large number of registered applications and instances to
+ensure it handles the load efficiently.
+6. Non-Functional Requirements
+a. Security: Use HTTPS for secure communication. Validate and sanitize the input.
+b. Scalability: Ensure the service can handle concurrent requests efficiently.
+c. Maintainability: Follow best coding practices and ensure the code is welldocumented.
+d. Logging: Use Spring Boot logging to capture request and response details for
+debugging.
+e. Documentation: Ensure that the source code and all deliverables are properly
+documented in English, providing clear explanations for all methods, classes, and
+configurations. User guides and setup instructions must also be included.
+7. Development Timeline
+Provide estimate of time with prices as provided below.
+‘ Task ‘ Duration in Hours
+Page 60f 7 Company Confidential Copyright © 2024 COMPU-DATA Intemational, LLC All Rights Reserved
+COMPU-DATA INTERNATIONAL, LLC 14610 Falling Creek Dr. « Houston, Texas 77068 (281) 292-1333 » Fax (281) 966.1598
+Software Development Specification Document
+Requirement Analysis
+Development
+Unit Testing
+Integration Testing
+Error and Performance Testing
+Deployment
+8. Deliverables
+a. Source code for the Spring Boot service.
+b. Unit and integration test cases.
+c. Documentation for setting up and running the service.
+d. Properly documented source code in English.
+9. Intellectual Property and Ownership
+All code and intellectual property (IP) created during the development of this web service
+shall be the exclusive property of COMPU-DATA International, LLC. The contracting
+company and its developers agree to:
+a. Transfer all rights, titles, and interests in the developed code and associated IP to
+COMPU-DATA International, LLC.
+. Waive any claim to ownership or rights over the code and IP created.
+c. Assist in defending COMPU-DATA International, LLC's rights to the code and IP in
+the event of any third-party claims or disputes.
+d. Ensure that any contributions by the contracting company’s employees are made
+under these same terms and are compliant with this agreement.
+Page 70of 7 Company Confidential Copyright © 2024 COMPU-DATA Intemational, LLC All Rights Reserved
