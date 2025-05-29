@@ -169,11 +169,6 @@ The service implements several security measures:
 - Error handling
 - Logging of requests and responses
 
-## License & Ownership
-
-Copyright © 2024 COMPU-DATA International, LLC. All Rights Reserved.
-
-All code and intellectual property created during the development of this web service is the exclusive property of COMPU-DATA International, LLC.
 
 ## Support
 
